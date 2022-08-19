@@ -1,9 +1,9 @@
 //Create cards of selected recipes
-async function displayrecipesData(recipesData) {
+async function displayrecipesData(recipes) {
     const recipesSection = document.querySelector(".recipes")
     recipesSection.innerHTML = ''
 
-    for (recette of recipesData.recipes) {
+    for (let recette of recipes) {
         const recipe = document.createElement('article')
         recipe.classList.add('recipe')
         const image = document.createElement('img')
@@ -22,9 +22,9 @@ async function displayrecipesData(recipesData) {
         const details = document.createElement('div')
         details.classList.add('details')
         const ingredients = document.createElement('ul')
-        for (ingredient of recette.ingredients) {
+        for (let ingredient of recette.ingredients) {
             const liste = document.createElement('li')
-            for (property in ingredient) {
+            for (let property in ingredient) {
                 liste.innerText += ingredient[property] + ' '
             }
             ingredients.appendChild(liste)
@@ -40,3 +40,5 @@ async function displayrecipesData(recipesData) {
         recipesSection.appendChild(recipe)
     }
 }
+
+export { displayrecipesData };

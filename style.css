@@ -61,15 +61,23 @@ section {
   font-size: 18px;
 }
 
+.header p:first-child {
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+}
+
 .details {
   font-size: 10px;
   display: flex;
 }
 
 .details p {
-  overflow: hidden;
+  display: -webkit-box;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 10.5em;
 }
 
 .instructions {
@@ -83,4 +91,178 @@ ul {
   padding: 0;
   width: 50%;
   padding-right: 5px;
+}
+
+.ingredientInput[type="text"] {
+  background-color: #3282F7;
+  border-radius: 3px;
+}
+
+.ingredientInput::placeholder {
+  color: #FFFFFF;
+}
+
+.ingredientInputList {
+  display: none;
+  position: absolute;
+  background-color: #3282F7;
+  color: #FFFFFF;
+  padding: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.ingredientInputList div {
+  margin-right: 10px;
+  margin-bottom: 5px;
+  flex: 1 1 30%;
+}
+
+.ingredientInputList:hover {
+  display: flex;
+  width: 600px;
+}
+
+.ingredientInputList div:hover {
+  cursor: pointer;
+}
+
+.ingredientInput:focus {
+  width: 600px;
+}
+
+.ingredientInput:focus+.ingredientInputList {
+  display: flex;
+  width: 600px;
+}
+
+.selectedTags {
+  margin-bottom: 15px;
+}
+
+.selectedTags button {
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.tags input {
+  padding: 10px;
+}
+
+.applianceInput[type="text"] {
+  background-color: #68D9A4;
+  border-radius: 3px;
+}
+
+.applianceInput::placeholder {
+  color: #FFFFFF;
+}
+
+.applianceInputList {
+  display: none;
+  position: absolute;
+  background-color: #68D9A4;
+  color: #FFFFFF;
+  padding: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.applianceInputList div {
+  margin-right: 10px;
+  margin-bottom: 5px;
+  flex: 1 1 30%;
+}
+
+.applianceInputList:hover {
+  display: flex;
+  width: 600px;
+}
+
+.applianceInputList div:hover {
+  cursor: pointer;
+}
+
+.applianceInput:focus {
+  width: 600px;
+}
+
+.applianceInput:focus+.applianceInputList {
+  display: flex;
+  width: 600px;
+}
+
+.ustensilInput[type="text"] {
+  background-color: #ED6454;
+  border-radius: 3px;
+}
+
+.ustensilInput::placeholder {
+  color: #FFFFFF;
+}
+
+.ustensilInputList {
+  display: none;
+  position: absolute;
+  background-color: #ED6454;
+  color: #FFFFFF;
+  padding: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.ustensilInputList div {
+  margin-right: 10px;
+  margin-bottom: 5px;
+  flex: 1 1 30%;
+}
+
+.ustensilInputList:hover {
+  display: flex;
+  width: 600px;
+}
+
+.ustensilInputList div:hover {
+  cursor: pointer;
+}
+
+.ustensilInput:focus {
+  width: 600px;
+}
+
+.ustensilInput:focus+.ustensilInputList {
+  display: flex;
+  width: 600px;
+}
+
+.inputs {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.input {
+  margin-right: 10px;
+}
+
+.btn-appliance {
+  background-color: #68D9A4;
+  border: 0;
+  color: #FFFFFF;
+}
+
+.btn-appliance:hover {
+  color: #E7E7E7;
+}
+
+.btn-ustensil {
+  background-color: #ED6454;
+  border: 0;
+  color: #FFFFFF;
+}
+
+.btn-ustensil:hover {
+  color: #E7E7E7;
 }
