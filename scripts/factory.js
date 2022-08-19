@@ -7,7 +7,7 @@ async function displayrecipesData(recipes) {
         const recipe = document.createElement('article')
         recipe.classList.add('recipe')
         const image = document.createElement('img')
-        image.setAttribute("src", "assets/food.jpeg")
+        image.setAttribute("src", "assets/food.png")
         recipe.appendChild(image)
         const informations = document.createElement('div')
         informations.classList.add('informations')

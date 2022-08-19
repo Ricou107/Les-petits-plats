@@ -121,9 +121,18 @@ init();
 
 // Input to search from string
 document.querySelector('.form-control').addEventListener('input', function (e) {
+    const tags = document.querySelector('.alertSection')
+    tags.innerHTML = ''
     if (e.target.value.length > 1) {
         input = e.target.value
         init()
+    } else if (e.target.value.length == 1) {
+        const tags = document.querySelector('.alertSection')
+        const alert = document.createElement('div')
+        alert.innerText = 'Entrez au moins deux caractères.'
+        alert.classList.add('alert')
+        alert.classList.add('alert-danger')
+        tags.appendChild(alert)
     } else {
         input = ''
         init()
@@ -137,7 +146,7 @@ document.querySelector('.ingredientInput').addEventListener('input', function (e
 
 // Enter a ingredient mandatory when pressing enter
 document.querySelector('.ingredientInput').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && e.target.value.length > 1) {
         document.querySelector('.alertSection').innerHTML = ''
         addIngredientTag(e.target.value)
     }
@@ -145,31 +154,42 @@ document.querySelector('.ingredientInput').addEventListener('keypress', function
 
 // Function to add the mandatory ingredient
 function addIngredientTag(tagIngredientToAdd) {
+    const tagsAlert = document.querySelector('.alertSection')
     if (JSON.stringify(availableTags.ingredients).toLowerCase().includes(tagIngredientToAdd.toLowerCase())) {
         const ingredientSelected = availableTags.ingredients.find(ingredient => ingredient.toLowerCase() === tagIngredientToAdd.toLowerCase())
-        const selectedTags = document.querySelector('.selectedTags')
-        const newTag = document.createElement('button')
-        newTag.setAttribute('type', 'button')
-        newTag.classList.add('btn')
-        newTag.classList.add('btn-primary')
-        newTag.innerHTML = ingredientSelected + '        <i class="fas fa-times-circle"></i>'
-        newTag.addEventListener('click', function () {
-            selectedTags.removeChild(newTag)
-            tags.ingredients.splice(tags.ingredients.indexOf(ingredientSelected), 1)
+        if (ingredientSelected !== undefined) {
+            const selectedTags = document.querySelector('.selectedTags')
+            const newTag = document.createElement('button')
+            newTag.setAttribute('type', 'button')
+            newTag.classList.add('btn')
+            newTag.classList.add('btn-primary')
+            newTag.innerHTML = ingredientSelected + '        <i class="fas fa-times-circle"></i>'
+            newTag.addEventListener('click', function () {
+                selectedTags.removeChild(newTag)
+                tags.ingredients.splice(tags.ingredients.indexOf(ingredientSelected), 1)
+                init();
+            })
+            selectedTags.appendChild(newTag)
+            tags.ingredients.push(ingredientSelected)
+            const input = document.querySelector('.ingredientInput')
+            input.value = ''
+            tagsAlert.innerHTML = ''
             init();
-        })
-        selectedTags.appendChild(newTag)
-        tags.ingredients.push(ingredientSelected)
-        const input = document.querySelector('.ingredientInput')
-        input.value = ''
-        init();
+        } else {
+            const tags = document.querySelector('.alertSection')
+            const alert = document.createElement('div')
+            alert.innerText = 'Cet ingredient n\'est pas disponible dans la liste actuelle !'
+            alert.classList.add('alert')
+            alert.classList.add('alert-danger')
+            tagsAlert.appendChild(alert)
+        }
     } else {
         const tags = document.querySelector('.alertSection')
         const alert = document.createElement('div')
         alert.innerText = 'Cet ingredient n\'est pas disponible dans la liste actuelle !'
         alert.classList.add('alert')
         alert.classList.add('alert-danger')
-        tags.appendChild(alert)
+        tagsAlert.appendChild(alert)
     }
 }
 
@@ -221,31 +241,41 @@ document.querySelector('.applianceInput').addEventListener('keypress', function 
 
 // Function to add the mandatory appliance
 function addApplianceTag(tagApplianceToAdd) {
+    const tagsAlert = document.querySelector('.alertSection')
     if (JSON.stringify(availableTags.appliances).toLowerCase().includes(tagApplianceToAdd.toLowerCase())) {
         const applianceSelected = availableTags.appliances.find(appliance => appliance.toLowerCase() === tagApplianceToAdd.toLowerCase())
-        const selectedTags = document.querySelector('.selectedTags')
-        const newTag = document.createElement('button')
-        newTag.setAttribute('type', 'button')
-        newTag.classList.add('btn')
-        newTag.classList.add('btn-appliance')
-        newTag.innerHTML = applianceSelected + '       <i class="fas fa-times-circle"></i>'
-        newTag.addEventListener('click', function () {
-            selectedTags.removeChild(newTag)
-            tags.appliances.splice(tags.appliances.indexOf(applianceSelected), 1)
+        if (applianceSelected !== undefined) {
+            const selectedTags = document.querySelector('.selectedTags')
+            const newTag = document.createElement('button')
+            newTag.setAttribute('type', 'button')
+            newTag.classList.add('btn')
+            newTag.classList.add('btn-appliance')
+            newTag.innerHTML = applianceSelected + '       <i class="fas fa-times-circle"></i>'
+            newTag.addEventListener('click', function () {
+                selectedTags.removeChild(newTag)
+                tags.appliances.splice(tags.appliances.indexOf(applianceSelected), 1)
+                init();
+            })
+            selectedTags.appendChild(newTag)
+            tags.appliances.push(applianceSelected)
+            const input = document.querySelector('.applianceInput')
+            input.value = ''
+            tagsAlert.innerHTML = ''
             init();
-        })
-        selectedTags.appendChild(newTag)
-        tags.appliances.push(applianceSelected)
-        const input = document.querySelector('.applianceInput')
-        input.value = ''
-        init();
+        }
+        else {
+            const alert = document.createElement('div')
+            alert.innerText = 'Cet appliance n\'est pas disponible dans la liste actuelle !'
+            alert.classList.add('alert')
+            alert.classList.add('alert-danger')
+            tagsAlert.appendChild(alert)
+        }
     } else {
-        const tags = document.querySelector('.alertSection')
         const alert = document.createElement('div')
         alert.innerText = 'Cet appliance n\'est pas disponible dans la liste actuelle !'
         alert.classList.add('alert')
         alert.classList.add('alert-danger')
-        tags.appendChild(alert)
+        tagsAlert.appendChild(alert)
     }
 }
 
@@ -298,31 +328,42 @@ document.querySelector('.ustensilInput').addEventListener('keypress', function (
 
 // Function to add the mandatory ustensil
 function addUstensilTag(tagUstensilToAdd) {
+    const tagsAlert = document.querySelector('.alertSection')
     if (JSON.stringify(availableTags.ustensils).toLowerCase().includes(tagUstensilToAdd.toLowerCase())) {
         const ustensilSelected = availableTags.ustensils.find(ustensil => ustensil.toLowerCase() === tagUstensilToAdd.toLowerCase())
-        const selectedTags = document.querySelector('.selectedTags')
-        const newTag = document.createElement('button')
-        newTag.setAttribute('type', 'button')
-        newTag.classList.add('btn')
-        newTag.classList.add('btn-ustensil')
-        newTag.innerHTML = ustensilSelected + '    <i class="fas fa-times-circle"></i>'
-        newTag.addEventListener('click', function () {
-            selectedTags.removeChild(newTag)
-            tags.ustensils.splice(tags.ustensils.indexOf(ustensilSelected), 1)
+        if (ustensilSelected !== undefined) {
+            const selectedTags = document.querySelector('.selectedTags')
+            const newTag = document.createElement('button')
+            newTag.setAttribute('type', 'button')
+            newTag.classList.add('btn')
+            newTag.classList.add('btn-ustensil')
+            newTag.innerHTML = ustensilSelected + '    <i class="fas fa-times-circle"></i>'
+            newTag.addEventListener('click', function () {
+                selectedTags.removeChild(newTag)
+                tags.ustensils.splice(tags.ustensils.indexOf(ustensilSelected), 1)
+                init();
+            })
+            selectedTags.appendChild(newTag)
+            tags.ustensils.push(ustensilSelected)
+            const input = document.querySelector('.ustensilInput')
+            input.value = ''
+            tagsAlert.innerHTML = ''
             init();
-        })
-        selectedTags.appendChild(newTag)
-        tags.ustensils.push(ustensilSelected)
-        const input = document.querySelector('.ustensilInput')
-        input.value = ''
-        init();
+        } else {
+            const tags = document.querySelector('.alertSection')
+            const alert = document.createElement('div')
+            alert.innerText = 'Cet ustensile n\'est pas disponible dans la liste actuelle !'
+            alert.classList.add('alert')
+            alert.classList.add('alert-danger')
+            tagsAlert.appendChild(alert)
+        }
     } else {
         const tags = document.querySelector('.alertSection')
         const alert = document.createElement('div')
         alert.innerText = 'Cet ustensile n\'est pas disponible dans la liste actuelle !'
         alert.classList.add('alert')
         alert.classList.add('alert-danger')
-        tags.appendChild(alert)
+        tagsAlert.appendChild(alert)
     }
 }
 

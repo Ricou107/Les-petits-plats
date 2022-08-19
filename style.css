@@ -241,10 +241,12 @@ ul {
 .inputs {
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 15px;
 }
 
 .input {
   margin-right: 10px;
+  position: relative;
 }
 
 .btn-appliance {
@@ -265,4 +267,15 @@ ul {
 
 .btn-ustensil:hover {
   color: #E7E7E7;
+}
+
+.fa-chevron-down {
+  position: absolute;
+  right: 10px;
+  top: 30%;
+  color: #FFFFFF;
+}
+
+.input div {
+  z-index: 3;
 }
