@@ -4,7 +4,7 @@ import { displayrecipesData } from './factory.js'
 // Input field for the search
 var input = ''
 
-// Tags selected by the user to filter tecipes
+// Tags selected by the user to filter recipes
 var tags = {
     ingredients: [],
     appliances: [],
@@ -28,15 +28,6 @@ async function init() {
     }
 
     // if there is an input, compute with the search
-/*     if (input) {
-        recipesToDisplay = []
-        for (let recipe of recipes) {
-            if (JSON.stringify(recipe).toLowerCase().includes(input.toLowerCase())) {
-                recipesToDisplay.push(recipe)
-            }
-        }
-    } */
-
     if (input) {
         recipesToDisplay = recipesToDisplay.filter((recipe) => JSON.stringify(recipe).toLowerCase().includes(input.toLowerCase()));
     }
