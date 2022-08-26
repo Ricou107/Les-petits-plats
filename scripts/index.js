@@ -4,7 +4,7 @@ import { displayrecipesData } from './factory.js'
 // Input field for the search
 var input = ''
 
-// Tags selected by the user to filter tecipes
+// Tags selected by the user to filter recipes
 var tags = {
     ingredients: [],
     appliances: [],
@@ -121,15 +121,16 @@ init();
 
 // Input to search from string
 document.querySelector('.form-control').addEventListener('input', function (e) {
+    console.log(e.target.value, e.target.value.length)
     const tags = document.querySelector('.alertSection')
     tags.innerHTML = ''
-    if (e.target.value.length > 1) {
+    if (e.target.value.length > 2) {
         input = e.target.value
         init()
-    } else if (e.target.value.length == 1) {
+    } else if ((e.target.value.length == 1) || (e.target.value.length == 2)) {
         const tags = document.querySelector('.alertSection')
         const alert = document.createElement('div')
-        alert.innerText = 'Entrez au moins deux caractères.'
+        alert.innerText = 'Entrez au moins trois caractères.'
         alert.classList.add('alert')
         alert.classList.add('alert-danger')
         tags.appendChild(alert)
