@@ -20,7 +20,7 @@ var availableTags = {
 
 //Initialisation function
 async function init() {
-    let recipesToDIsplay = recipes
+    let recipesToDisplay = recipes
     availableTags = {
         ingredients: [],
         appliances: [],
@@ -28,53 +28,57 @@ async function init() {
     }
 
     // if there is an input, compute with the search
-    if (input) {
-        recipesToDIsplay = []
+/*     if (input) {
+        recipesToDisplay = []
         for (let recipe of recipes) {
             if (JSON.stringify(recipe).toLowerCase().includes(input.toLowerCase())) {
-                recipesToDIsplay.push(recipe)
+                recipesToDisplay.push(recipe)
             }
         }
+    } */
+
+    if (input) {
+        recipesToDisplay = recipesToDisplay.filter((recipe) => JSON.stringify(recipe).toLowerCase().includes(input.toLowerCase()));
     }
 
     // Is there any ingredient selected?
     if (tags.ingredients.length > 0) {
-        let newRecipesToDisplay = []
-        for (let i = 0; i < recipesToDIsplay.length; i++) {
-            if (tags.ingredients.every(ingredient => { return JSON.stringify(recipesToDIsplay[i].ingredients).toLowerCase().includes(ingredient.toLowerCase()) })) {
-                newRecipesToDisplay.push(recipesToDIsplay[i])
+        let newrecipesToDisplay = []
+        for (let i = 0; i < recipesToDisplay.length; i++) {
+            if (tags.ingredients.every(ingredient => { return JSON.stringify(recipesToDisplay[i].ingredients).toLowerCase().includes(ingredient.toLowerCase()) })) {
+                newrecipesToDisplay.push(recipesToDisplay[i])
             }
         }
-        recipesToDIsplay = newRecipesToDisplay
+        recipesToDisplay = newrecipesToDisplay
     }
 
     // Is there any appliance selected?
     if (tags.appliances.length > 0) {
-        let newRecipesToDisplay = []
-        for (let i = 0; i < recipesToDIsplay.length; i++) {
-            if (tags.appliances.every(appliance => { return JSON.stringify(recipesToDIsplay[i].appliance).toLowerCase().includes(appliance.toLowerCase()) })) {
-                newRecipesToDisplay.push(recipesToDIsplay[i])
+        let newrecipesToDisplay = []
+        for (let i = 0; i < recipesToDisplay.length; i++) {
+            if (tags.appliances.every(appliance => { return JSON.stringify(recipesToDisplay[i].appliance).toLowerCase().includes(appliance.toLowerCase()) })) {
+                newrecipesToDisplay.push(recipesToDisplay[i])
             }
         }
-        recipesToDIsplay = newRecipesToDisplay
+        recipesToDisplay = newrecipesToDisplay
     }
 
     // Is there any ustensil selected?
     if (tags.ustensils.length > 0) {
-        let newRecipesToDisplay = []
-        for (let i = 0; i < recipesToDIsplay.length; i++) {
-            if (tags.ustensils.every(ustensil => { return JSON.stringify(recipesToDIsplay[i].ustensils).toLowerCase().includes(ustensil.toLowerCase()) })) {
-                newRecipesToDisplay.push(recipesToDIsplay[i])
+        let newrecipesToDisplay = []
+        for (let i = 0; i < recipesToDisplay.length; i++) {
+            if (tags.ustensils.every(ustensil => { return JSON.stringify(recipesToDisplay[i].ustensils).toLowerCase().includes(ustensil.toLowerCase()) })) {
+                newrecipesToDisplay.push(recipesToDisplay[i])
             }
         }
-        recipesToDIsplay = newRecipesToDisplay
+        recipesToDisplay = newrecipesToDisplay
     }
 
 
 
     // Compute the new avaialble tags
-    if (recipesToDIsplay.length > 0) {
-        for (let recipe of recipesToDIsplay) {
+    if (recipesToDisplay.length > 0) {
+        for (let recipe of recipesToDisplay) {
             for (let ingredient of recipe.ingredients) {
                 if (!availableTags.ingredients.includes(ingredient.ingredient) && !tags.ingredients.includes(ingredient.ingredient)) {
                     availableTags.ingredients.push(ingredient.ingredient)
@@ -90,7 +94,7 @@ async function init() {
             }
         }
 
-        console.log('recipesToDIsplay', recipesToDIsplay)
+        console.log('recipesToDisplay', recipesToDisplay)
         console.log('availableTags', availableTags)
         console.log('tags', tags)
 
@@ -100,7 +104,7 @@ async function init() {
         searchUstensilTag()
 
         // Display the recipes accordingly to the search
-        displayrecipesData(recipesToDIsplay)
+        displayrecipesData(recipesToDisplay)
 
 
     } else {
@@ -121,15 +125,16 @@ init();
 
 // Input to search from string
 document.querySelector('.form-control').addEventListener('input', function (e) {
+    console.log(e.target.value, e.target.value.length)
     const tags = document.querySelector('.alertSection')
     tags.innerHTML = ''
-    if (e.target.value.length > 1) {
+    if (e.target.value.length > 2) {
         input = e.target.value
         init()
-    } else if (e.target.value.length == 1) {
+    } else if ((e.target.value.length == 1) || (e.target.value.length == 2)) {
         const tags = document.querySelector('.alertSection')
         const alert = document.createElement('div')
-        alert.innerText = 'Entrez au moins deux caractères.'
+        alert.innerText = 'Entrez au moins trois caractères.'
         alert.classList.add('alert')
         alert.classList.add('alert-danger')
         tags.appendChild(alert)
