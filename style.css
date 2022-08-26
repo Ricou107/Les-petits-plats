@@ -10,7 +10,6 @@ input[type="text"],
 .input-group-text {
   background-color: #E7E7E7;
   border: none;
-  padding: none;
 }
 
 .input-group {
@@ -276,5 +275,5 @@ ul {
 }
 
 .input div {
-  z-index: ;
+  z-index: 3;
 }
