@@ -7,14 +7,14 @@ var input = "";
 // Tags selected by the user to filter recipes
 var tags = {
   ingredients: [],
-  appliances: [],
+  appliance: [],
   ustensils: [],
 };
 
 // Tags available for filtering accordingly to the recipes displayed
 var availableTags = {
   ingredients: [],
-  appliances: [],
+  appliance: [],
   ustensils: [],
 };
 
@@ -23,7 +23,7 @@ async function init() {
   let recipesToDisplay = recipes;
   availableTags = {
     ingredients: [],
-    appliances: [],
+    appliance: [],
     ustensils: [],
   };
 
@@ -40,7 +40,6 @@ async function init() {
   }
 
   Object.entries(tags).map((category) => {
-    console.log(category);
         if (category[1].length > 0) {
           let newRecipesToDisplay = [];
           for (let i = 0; i < recipesToDisplay.length; i++) {
@@ -95,11 +94,11 @@ async function init() {
   }
 
   // Is there any appliance selected?
-  if (tags.appliances.length > 0) {
+  if (tags.appliance.length > 0) {
     let newrecipesToDisplay = [];
     for (let i = 0; i < recipesToDisplay.length; i++) {
       if (
-        tags.appliances.every((appliance) => {
+        tags.appliance.every((appliance) => {
           return JSON.stringify(recipesToDisplay[i].appliance)
             .toLowerCase()
             .includes(appliance.toLowerCase());
@@ -140,10 +139,10 @@ async function init() {
         }
       }
       if (
-        !availableTags.appliances.includes(recipe.appliance) &&
-        !tags.appliances.includes(recipe.appliance)
+        !availableTags.appliance.includes(recipe.appliance) &&
+        !tags.appliance.includes(recipe.appliance)
       ) {
-        availableTags.appliances.push(recipe.appliance);
+        availableTags.appliance.push(recipe.appliance);
       }
       for (let ustensil of recipe.ustensils) {
         if (
@@ -330,28 +329,28 @@ document
 function addApplianceTag(tagApplianceToAdd) {
   const tagsAlert = document.querySelector(".alertSection");
   if (
-    JSON.stringify(availableTags.appliances)
+    JSON.stringify(availableTags.appliance)
       .toLowerCase()
       .includes(tagApplianceToAdd.toLowerCase())
   ) {
-    const applianceSelected = availableTags.appliances.find(
+    const applianceelected = availableTags.appliance.find(
       (appliance) => appliance.toLowerCase() === tagApplianceToAdd.toLowerCase()
     );
-    if (applianceSelected !== undefined) {
+    if (applianceelected !== undefined) {
       const selectedTags = document.querySelector(".selectedTags");
       const newTag = document.createElement("button");
       newTag.setAttribute("type", "button");
       newTag.classList.add("btn");
       newTag.classList.add("btn-appliance");
       newTag.innerHTML =
-        applianceSelected + '       <i class="fas fa-times-circle"></i>';
+        applianceelected + '       <i class="fas fa-times-circle"></i>';
       newTag.addEventListener("click", function () {
         selectedTags.removeChild(newTag);
-        tags.appliances.splice(tags.appliances.indexOf(applianceSelected), 1);
+        tags.appliance.splice(tags.appliance.indexOf(applianceelected), 1);
         init();
       });
       selectedTags.appendChild(newTag);
-      tags.appliances.push(applianceSelected);
+      tags.appliance.push(applianceelected);
       const input = document.querySelector(".applianceInput");
       input.value = "";
       tagsAlert.innerHTML = "";
@@ -382,7 +381,7 @@ function searchApplianceTag(tagApplianceToSearch) {
   let tagToDisplay = [];
 
   if (tagApplianceToSearch !== undefined) {
-    for (let appliance of availableTags.appliances) {
+    for (let appliance of availableTags.appliance) {
       if (
         appliance.toLowerCase().includes(tagApplianceToSearch.toLowerCase())
       ) {
@@ -390,7 +389,7 @@ function searchApplianceTag(tagApplianceToSearch) {
       }
     }
   } else {
-    tagToDisplay = availableTags.appliances;
+    tagToDisplay = availableTags.appliance;
   }
 
   for (let appliance of tagToDisplay) {
