@@ -31,8 +31,14 @@ async function init() {
     if (input) {
         recipesToDIsplay = []
         for (let recipe of recipes) {
-            if (JSON.stringify(recipe).toLowerCase().includes(input.toLowerCase())) {
+            if (recipe.name.toLowerCase().includes(input.toLowerCase())) {
                 recipesToDIsplay.push(recipe)
+            } else if (recipe.description.toLowerCase().includes(input.toLowerCase())) {
+                recipesToDIsplay.push(recipe);
+            } else for (let ingredients of recipe.ingredients) {
+                if (ingredients.ingredient.toLowerCase().includes(input.toLowerCase())) {
+                    recipesToDIsplay.push(recipe);
+                }
             }
         }
     }
