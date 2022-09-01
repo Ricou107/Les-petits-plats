@@ -91,16 +91,16 @@ ul {
   padding-right: 5px;
 }
 
-.ingredientInput[type="text"] {
+.ingredientsInput[type="text"] {
   background-color: #3282F7;
   border-radius: 3px;
 }
 
-.ingredientInput::placeholder {
+.ingredientsInput::placeholder {
   color: #FFFFFF;
 }
 
-.ingredientInputList {
+.ingredientsInputList {
   display: none;
   position: absolute;
   background-color: #3282F7;
@@ -111,26 +111,26 @@ ul {
   justify-content: center;
 }
 
-.ingredientInputList div {
+.ingredientsInputList div {
   margin-right: 10px;
   margin-bottom: 5px;
   flex: 1 1 30%;
 }
 
-.ingredientInputList:hover {
+.ingredientsInputList:hover {
   display: flex;
   width: 600px;
 }
 
-.ingredientInputList div:hover {
+.ingredientsInputList div:hover {
   cursor: pointer;
 }
 
-.ingredientInput:focus {
+.ingredientsInput:focus {
   width: 600px;
 }
 
-.ingredientInput:focus+.ingredientInputList {
+.ingredientsInput:focus+.ingredientsInputList {
   display: flex;
   width: 600px;
 }
@@ -192,16 +192,16 @@ ul {
   width: 600px;
 }
 
-.ustensilInput[type="text"] {
+.ustensilsInput[type="text"] {
   background-color: #ED6454;
   border-radius: 3px;
 }
 
-.ustensilInput::placeholder {
+.ustensilsInput::placeholder {
   color: #FFFFFF;
 }
 
-.ustensilInputList {
+.ustensilsInputList {
   display: none;
   position: absolute;
   background-color: #ED6454;
@@ -212,26 +212,26 @@ ul {
   justify-content: center;
 }
 
-.ustensilInputList div {
+.ustensilsInputList div {
   margin-right: 10px;
   margin-bottom: 5px;
   flex: 1 1 30%;
 }
 
-.ustensilInputList:hover {
+.ustensilsInputList:hover {
   display: flex;
   width: 600px;
 }
 
-.ustensilInputList div:hover {
+.ustensilsInputList div:hover {
   cursor: pointer;
 }
 
-.ustensilInput:focus {
+.ustensilsInput:focus {
   width: 600px;
 }
 
-.ustensilInput:focus+.ustensilInputList {
+.ustensilsInput:focus+.ustensilsInputList {
   display: flex;
   width: 600px;
 }
@@ -257,13 +257,13 @@ ul {
   color: #E7E7E7;
 }
 
-.btn-ustensil {
+.btn-ustensils {
   background-color: #ED6454;
   border: 0;
   color: #FFFFFF;
 }
 
-.btn-ustensil:hover {
+.btn-ustensils:hover {
   color: #E7E7E7;
 }
 

@@ -1,5 +1,5 @@
 //Create cards of selected recipes
-async function displayrecipesData(recipes) {
+async function displayRecipesData(recipes) {
     const recipesSection = document.querySelector(".recipes")
     recipesSection.innerHTML = ''
 
@@ -41,4 +41,4 @@ async function displayrecipesData(recipes) {
     }
 }
 
-export { displayrecipesData };
+export { displayRecipesData };

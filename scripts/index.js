@@ -1,5 +1,5 @@
 import { recipes } from "./recipes.js";
-import { displayrecipesData } from "./factory.js";
+import { displayRecipesData } from "./factory.js";
 
 // Input field for the search
 var input = "";
@@ -39,12 +39,13 @@ async function init() {
     );
   }
 
+  // Is there any ingredient, appliance or ustensil selected? If yes, filter the recipes to display
   Object.entries(tags).map((category) => {
-        if (category[1].length > 0) {
-          let newRecipesToDisplay = [];
-          for (let i = 0; i < recipesToDisplay.length; i++) {
-            if (
-              category[1].every((item) => {
+    if (category[1].length > 0) {
+      let newRecipesToDisplay = [];
+      for (let i = 0; i < recipesToDisplay.length; i++) {
+        if (
+          category[1].every((item) => {
                 return JSON.stringify(recipesToDisplay[i][category[0]])
                   .toLowerCase()
                   .includes(item.toLowerCase());
@@ -57,77 +58,7 @@ async function init() {
         }
   });
 
-/*   for (let item in tags) {
-    console.log(item)
-    if (category.length > 0) {
-      let newRecipesToDisplay = [];
-      for (let i = 0; i < recipesToDisplay.length; i++) {
-        if (
-          category.every((item) => {
-            return JSON.stringify(recipesToDisplay[i][category])
-              .toLowerCase()
-              .includes(item.toLowerCase());
-          })
-        ) {
-          newRecipesToDisplay.push(recipesToDisplay[i]);
-        }
-      }
-      recipesToDisplay = newRecipesToDisplay;
-    }
-  } */
-
-/*   // Is there any ingredient selected?
-  if (tags.ingredients.length > 0) {
-    let newrecipesToDisplay = [];
-    for (let i = 0; i < recipesToDisplay.length; i++) {
-      if (
-        tags.ingredients.every((ingredient) => {
-          return JSON.stringify(recipesToDisplay[i].ingredients)
-            .toLowerCase()
-            .includes(ingredient.toLowerCase());
-        })
-      ) {
-        newrecipesToDisplay.push(recipesToDisplay[i]);
-      }
-    }
-    recipesToDisplay = newrecipesToDisplay;
-  }
-
-  // Is there any appliance selected?
-  if (tags.appliance.length > 0) {
-    let newrecipesToDisplay = [];
-    for (let i = 0; i < recipesToDisplay.length; i++) {
-      if (
-        tags.appliance.every((appliance) => {
-          return JSON.stringify(recipesToDisplay[i].appliance)
-            .toLowerCase()
-            .includes(appliance.toLowerCase());
-        })
-      ) {
-        newrecipesToDisplay.push(recipesToDisplay[i]);
-      }
-    }
-    recipesToDisplay = newrecipesToDisplay;
-  }
-
-  // Is there any ustensil selected?
-  if (tags.ustensils.length > 0) {
-    let newrecipesToDisplay = [];
-    for (let i = 0; i < recipesToDisplay.length; i++) {
-      if (
-        tags.ustensils.every((ustensil) => {
-          return JSON.stringify(recipesToDisplay[i].ustensils)
-            .toLowerCase()
-            .includes(ustensil.toLowerCase());
-        })
-      ) {
-        newrecipesToDisplay.push(recipesToDisplay[i]);
-      }
-    }
-    recipesToDisplay = newrecipesToDisplay;
-  } */
-
-  // Compute the new avaialble tags
+  // Compute the new available tags
   if (recipesToDisplay.length > 0) {
     for (let recipe of recipesToDisplay) {
       for (let ingredient of recipe.ingredients) {
@@ -159,12 +90,12 @@ async function init() {
     console.log("tags", tags);
 
     // Compute the display of tags
-    searchIngredientTag();
-    searchApplianceTag();
-    searchUstensilTag();
+    for (let tag in tags) {
+    searchTag(tag);
+    }
 
     // Display the recipes accordingly to the search
-    displayrecipesData(recipesToDisplay);
+    displayRecipesData(recipesToDisplay);
   } else {
     // If no recipes correspond to the search, an error message appear
     const recipesSection = document.querySelector(".recipes");
@@ -172,9 +103,9 @@ async function init() {
       "Il n'y a pas de recettes qui correspondent à votre recherche, dommage!";
 
     // Compute the display of tags
-    searchIngredientTag();
-    searchApplianceTag();
-    searchUstensilTag();
+    for (let tag in tags) {
+      searchTag(tag);
+    }
   }
 }
 
@@ -202,54 +133,86 @@ document.querySelector(".form-control").addEventListener("input", function (e) {
   }
 });
 
-// Search an ingredient from the list
-document
-  .querySelector(".ingredientInput")
-  .addEventListener("input", function (e) {
-    searchIngredientTag(e.target.value);
-  });
+for (let tag in tags) {
+  // Search an tag from the list
+  document
+    .querySelector(`.${tag}Input`)
+    .addEventListener("input", function (e) {
+      searchTag(tag, e.target.value);
+    });
 
-// Enter a ingredient mandatory when pressing enter
-document
-  .querySelector(".ingredientInput")
-  .addEventListener("keypress", function (e) {
-    if (e.key === "Enter" && e.target.value.length > 1) {
-      document.querySelector(".alertSection").innerHTML = "";
-      addIngredientTag(e.target.value);
+  // Enter a tag mandatory within a recipe when pressing enter
+  document
+    .querySelector(`.${tag}Input`)
+    .addEventListener("keypress", function (e) {
+      if (e.key === "Enter" && e.target.value.length > 1) {
+        document.querySelector(".alertSection").innerHTML = "";
+        addTag(tag, e.target.value);
+      }
+    });
+}
+
+// Function to display the list of tag depdending of the input
+function searchTag(tagType, tagToSearch) {
+  let liste = document.querySelector(`.${tagType}InputList`);
+  liste.innerHTML = "";
+
+  let tagToDisplay = [];
+
+  if (tagToSearch !== undefined) {
+    for (let item of availableTags[tagType]) {
+      if (item.toLowerCase().includes(tagToSearch.toLowerCase())) {
+        tagToDisplay.push(item);
+      }
     }
-  });
+  } else {
+    tagToDisplay = availableTags[tagType];
+  }
 
-// Function to add the mandatory ingredient
-function addIngredientTag(tagIngredientToAdd) {
+  for (let item of tagToDisplay) {
+    let newItem = document.createElement("div");
+    newItem.innerHTML = item;
+    newItem.addEventListener("click", function () {
+      addTag(tagType, item);
+    });
+    liste.appendChild(newItem);
+  }
+
+  if (tagToDisplay.length === 0) {
+    let error = document.createElement("p");
+    error.innerText = "Cet élément n'est plus disponible :(";
+    liste.appendChild(error);
+  }
+}
+
+// Function to add the mandatory tag
+function addTag(tagType, tagToAdd) {
   const tagsAlert = document.querySelector(".alertSection");
   if (
-    JSON.stringify(availableTags.ingredients)
+    JSON.stringify(availableTags[tagType])
       .toLowerCase()
-      .includes(tagIngredientToAdd.toLowerCase())
+      .includes(tagToAdd.toLowerCase())
   ) {
-    const ingredientSelected = availableTags.ingredients.find(
-      (ingredient) =>
-        ingredient.toLowerCase() === tagIngredientToAdd.toLowerCase()
+    const itemSelected = availableTags[tagType].find(
+      (item) => item.toLowerCase() === tagToAdd.toLowerCase()
     );
-    if (ingredientSelected !== undefined) {
+    if (itemSelected !== undefined) {
       const selectedTags = document.querySelector(".selectedTags");
       const newTag = document.createElement("button");
       newTag.setAttribute("type", "button");
       newTag.classList.add("btn");
       newTag.classList.add("btn-primary");
+      newTag.classList.add(`btn-${tagType}`);
       newTag.innerHTML =
-        ingredientSelected + '        <i class="fas fa-times-circle"></i>';
+        itemSelected + '        <i class="fas fa-times-circle"></i>';
       newTag.addEventListener("click", function () {
         selectedTags.removeChild(newTag);
-        tags.ingredients.splice(
-          tags.ingredients.indexOf(ingredientSelected),
-          1
-        );
+        tags[tagType].splice(tags[tagType].indexOf(itemSelected), 1);
         init();
       });
       selectedTags.appendChild(newTag);
-      tags.ingredients.push(ingredientSelected);
-      const input = document.querySelector(".ingredientInput");
+      tags[tagType].push(itemSelected);
+      const input = document.querySelector(`.${tagType}Input`);
       input.value = "";
       tagsAlert.innerHTML = "";
       init();
@@ -257,7 +220,7 @@ function addIngredientTag(tagIngredientToAdd) {
       const tags = document.querySelector(".alertSection");
       const alert = document.createElement("div");
       alert.innerText =
-        "Cet ingredient n'est pas disponible dans la liste actuelle !";
+        "Cet élément n'est pas disponible dans la liste actuelle !";
       alert.classList.add("alert");
       alert.classList.add("alert-danger");
       tagsAlert.appendChild(alert);
@@ -266,244 +229,9 @@ function addIngredientTag(tagIngredientToAdd) {
     const tags = document.querySelector(".alertSection");
     const alert = document.createElement("div");
     alert.innerText =
-      "Cet ingredient n'est pas disponible dans la liste actuelle !";
+      "Cet élément n'est pas disponible dans la liste actuelle !";
     alert.classList.add("alert");
     alert.classList.add("alert-danger");
     tagsAlert.appendChild(alert);
-  }
-}
-
-// Function to display the list of ingredient depdending of the input
-function searchIngredientTag(tagIngredientToSearch) {
-  let liste = document.querySelector(".ingredientInputList");
-  liste.innerHTML = "";
-
-  let tagToDisplay = [];
-
-  if (tagIngredientToSearch !== undefined) {
-    for (let ingredient of availableTags.ingredients) {
-      if (
-        ingredient.toLowerCase().includes(tagIngredientToSearch.toLowerCase())
-      ) {
-        tagToDisplay.push(ingredient);
-      }
-    }
-  } else {
-    tagToDisplay = availableTags.ingredients;
-  }
-
-  for (let ingredient of tagToDisplay) {
-    let newIngredient = document.createElement("div");
-    newIngredient.innerHTML = ingredient;
-    newIngredient.addEventListener("click", function () {
-      addIngredientTag(ingredient);
-    });
-    liste.appendChild(newIngredient);
-  }
-
-  if (tagToDisplay.length === 0) {
-    let error = document.createElement("p");
-    error.innerText = "Il n'y a pas/plus d'ingredient disponible :(";
-    liste.appendChild(error);
-  }
-}
-
-// Search an appliance from the list
-document
-  .querySelector(".applianceInput")
-  .addEventListener("input", function (e) {
-    searchApplianceTag(e.target.value);
-  });
-
-// Enter an appliance mandatory when pressing enter
-document
-  .querySelector(".applianceInput")
-  .addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-      document.querySelector(".alertSection").innerHTML = "";
-      addIngredientTag(e.target.value);
-    }
-  });
-
-// Function to add the mandatory appliance
-function addApplianceTag(tagApplianceToAdd) {
-  const tagsAlert = document.querySelector(".alertSection");
-  if (
-    JSON.stringify(availableTags.appliance)
-      .toLowerCase()
-      .includes(tagApplianceToAdd.toLowerCase())
-  ) {
-    const applianceelected = availableTags.appliance.find(
-      (appliance) => appliance.toLowerCase() === tagApplianceToAdd.toLowerCase()
-    );
-    if (applianceelected !== undefined) {
-      const selectedTags = document.querySelector(".selectedTags");
-      const newTag = document.createElement("button");
-      newTag.setAttribute("type", "button");
-      newTag.classList.add("btn");
-      newTag.classList.add("btn-appliance");
-      newTag.innerHTML =
-        applianceelected + '       <i class="fas fa-times-circle"></i>';
-      newTag.addEventListener("click", function () {
-        selectedTags.removeChild(newTag);
-        tags.appliance.splice(tags.appliance.indexOf(applianceelected), 1);
-        init();
-      });
-      selectedTags.appendChild(newTag);
-      tags.appliance.push(applianceelected);
-      const input = document.querySelector(".applianceInput");
-      input.value = "";
-      tagsAlert.innerHTML = "";
-      init();
-    } else {
-      const alert = document.createElement("div");
-      alert.innerText =
-        "Cet appliance n'est pas disponible dans la liste actuelle !";
-      alert.classList.add("alert");
-      alert.classList.add("alert-danger");
-      tagsAlert.appendChild(alert);
-    }
-  } else {
-    const alert = document.createElement("div");
-    alert.innerText =
-      "Cet appliance n'est pas disponible dans la liste actuelle !";
-    alert.classList.add("alert");
-    alert.classList.add("alert-danger");
-    tagsAlert.appendChild(alert);
-  }
-}
-
-// Function to display the list of appliance depdending of the input
-function searchApplianceTag(tagApplianceToSearch) {
-  let liste = document.querySelector(".applianceInputList");
-  liste.innerHTML = "";
-
-  let tagToDisplay = [];
-
-  if (tagApplianceToSearch !== undefined) {
-    for (let appliance of availableTags.appliance) {
-      if (
-        appliance.toLowerCase().includes(tagApplianceToSearch.toLowerCase())
-      ) {
-        tagToDisplay.push(appliance);
-      }
-    }
-  } else {
-    tagToDisplay = availableTags.appliance;
-  }
-
-  for (let appliance of tagToDisplay) {
-    let newAppliance = document.createElement("div");
-    newAppliance.innerHTML = appliance;
-    newAppliance.addEventListener("click", function () {
-      addApplianceTag(appliance);
-    });
-    liste.appendChild(newAppliance);
-  }
-
-  if (tagToDisplay.length === 0) {
-    let error = document.createElement("p");
-    error.innerText = "Il n'y a pas/plus d'appareil disponible :(";
-    liste.appendChild(error);
-  }
-}
-
-// Search an ustensil from the list
-document
-  .querySelector(".ustensilInput")
-  .addEventListener("input", function (e) {
-    searchUstensilTag(e.target.value);
-  });
-
-// Enter an ustensil mandatory when pressing enter
-document
-  .querySelector(".ustensilInput")
-  .addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-      document.querySelector(".alertSection").innerHTML = "";
-      addIngredientTag(e.target.value);
-    }
-  });
-
-// Function to add the mandatory ustensil
-function addUstensilTag(tagUstensilToAdd) {
-  const tagsAlert = document.querySelector(".alertSection");
-  if (
-    JSON.stringify(availableTags.ustensils)
-      .toLowerCase()
-      .includes(tagUstensilToAdd.toLowerCase())
-  ) {
-    const ustensilSelected = availableTags.ustensils.find(
-      (ustensil) => ustensil.toLowerCase() === tagUstensilToAdd.toLowerCase()
-    );
-    if (ustensilSelected !== undefined) {
-      const selectedTags = document.querySelector(".selectedTags");
-      const newTag = document.createElement("button");
-      newTag.setAttribute("type", "button");
-      newTag.classList.add("btn");
-      newTag.classList.add("btn-ustensil");
-      newTag.innerHTML =
-        ustensilSelected + '    <i class="fas fa-times-circle"></i>';
-      newTag.addEventListener("click", function () {
-        selectedTags.removeChild(newTag);
-        tags.ustensils.splice(tags.ustensils.indexOf(ustensilSelected), 1);
-        init();
-      });
-      selectedTags.appendChild(newTag);
-      tags.ustensils.push(ustensilSelected);
-      const input = document.querySelector(".ustensilInput");
-      input.value = "";
-      tagsAlert.innerHTML = "";
-      init();
-    } else {
-      const tags = document.querySelector(".alertSection");
-      const alert = document.createElement("div");
-      alert.innerText =
-        "Cet ustensile n'est pas disponible dans la liste actuelle !";
-      alert.classList.add("alert");
-      alert.classList.add("alert-danger");
-      tagsAlert.appendChild(alert);
-    }
-  } else {
-    const tags = document.querySelector(".alertSection");
-    const alert = document.createElement("div");
-    alert.innerText =
-      "Cet ustensile n'est pas disponible dans la liste actuelle !";
-    alert.classList.add("alert");
-    alert.classList.add("alert-danger");
-    tagsAlert.appendChild(alert);
-  }
-}
-
-// Function to display the list of ustensil depdending of the input
-function searchUstensilTag(tagUstensilToSearch) {
-  let liste = document.querySelector(".ustensilInputList");
-  liste.innerHTML = "";
-
-  let tagToDisplay = [];
-
-  if (tagUstensilToSearch !== undefined) {
-    for (let ustensil of availableTags.ustensils) {
-      if (ustensil.toLowerCase().includes(tagUstensilToSearch.toLowerCase())) {
-        tagToDisplay.push(ustensil);
-      }
-    }
-  } else {
-    tagToDisplay = availableTags.ustensils;
-  }
-
-  for (let ustensil of tagToDisplay) {
-    let newUstensil = document.createElement("div");
-    newUstensil.innerHTML = ustensil;
-    newUstensil.addEventListener("click", function () {
-      addUstensilTag(ustensil);
-    });
-    liste.appendChild(newUstensil);
-  }
-
-  if (tagToDisplay.length === 0) {
-    let error = document.createElement("p");
-    error.innerText = "Il n'y a pas/plus d'ustensile disponible :(";
-    liste.appendChild(error);
   }
 }
